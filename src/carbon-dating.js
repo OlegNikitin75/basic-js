@@ -1,31 +1,17 @@
-// import { NotImplementedError } from '../extensions/index.js';
+import { NotImplementedError } from '../extensions/index.js';
 
 const MODERN_ACTIVITY = 15;
 const HALF_LIFE_PERIOD = 5730;
+const k = 0.693 / HALF_LIFE_PERIOD;
 
-/**
- * Determine the age of archeological find by using
- * given MODERN_ACTIVITY and HALF_LIFE_PERIOD values
- * 
- * @param {String} sampleActivity string representation of current activity 
- * @return {Number | Boolean} calculated age in years or false
- * in case of incorrect sampleActivity
- *
- * @example
- * 
- * dateSample('1') => 22387
- * dateSample('WOOT!') => false
- *
- */
 export default function dateSample(sampleActivity) {
-  // throw new NotImplementedError('Not implemented');
-  if (
-    typeof sampleActivity == 'string' &&
-    sampleActivity !== NaN &&
-    sampleActivity > 0 &&
-    sampleActivity < MODERN_ACTIVITY
-  ) {
-    let ln = Math.log(MODERN_ACTIVITY / sampleActivity);
-    return (result = Math.ceil(ln / (0.693 / HALF_LIFE_PERIOD)));
-  } else return false;
+  if (typeof sampleActivity !== 'string') return false;
+  if (sampleActivity === undefined) return false;
+  const sampleActivityNumber = parseFloat(sampleActivity);
+  if (isNaN(sampleActivityNumber)) return false;
+  if (sampleActivityNumber > MODERN_ACTIVITY) return false;
+  if (sampleActivityNumber <= 0) return false;
+  const LogValue = Math.log(MODERN_ACTIVITY / sampleActivityNumber)
+  return Math.ceil(LogValue / k);
 }
+
